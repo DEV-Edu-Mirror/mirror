@@ -15,6 +15,7 @@ fi
 # 创建临时目录
 mkdir -p "$TEMP_DIR"
 
+# 定义同步函数
 sync_repo() {
   local gitee_repo=$1
   local github_repo=$2
@@ -40,10 +41,10 @@ sync_repo() {
   echo "Finished syncing $repo_name"
 }
 
-export -f sync_repo
-
 # 读取仓库列表并同步
-cat "$REPO_FILE" | parallel --jobs 4 --colsep ' ' sync_repo {1} {2} "$TEMP_DIR"
+while IFS=' ' read -r gitee_repo github_repo; do
+  sync_repo "$gitee_repo" "$github_repo" "$TEMP_DIR"
+done < "$REPO_FILE"
 
 # 删除临时目录
 rm -rf "$TEMP_DIR"
