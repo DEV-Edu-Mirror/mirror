@@ -21,6 +21,7 @@ jobs:
 
     - name: Sync repositories
       run: |
+        ssh-keyscan -t ed25519 gitee.com >> ~/.ssh/known_hosts
         chmod +x sync_repos.sh
         ./sync_repos.sh
 
